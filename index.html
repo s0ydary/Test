@@ -1,12 +1,298 @@
-<html>
+<!DOCTYPE html>
+<html lang="es">
 <head>
-<title>Test</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terminal Style - Educational</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #000;
+            color: #00ff00;
+            font-family: 'Courier New', monospace;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            opacity: 0.1;
+        }
+
+        .terminal {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #00ff00;
+            box-shadow: 0 0 15px #00ff00;
+        }
+
+        .glitch {
+            font-size: 2.5em;
+            color: #00ff00;
+            text-shadow: 2px 2px 0 #0080ff, -2px -2px 0 #ff0080;
+            animation: glitch 3s infinite;
+        }
+
+        @keyframes glitch {
+            0%, 100% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+        }
+
+        .command-line {
+            background: rgba(0, 255, 0, 0.1);
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 3px solid #00ff00;
+        }
+
+        .prompt {
+            color: #0080ff;
+        }
+
+        .typing {
+            overflow: hidden;
+            border-right: 2px solid #00ff00;
+            white-space: nowrap;
+            animation: typing 3.5s steps(40, end), blink-caret 0.75s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+            to { width: 100% }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent }
+            50% { border-color: #00ff00 }
+        }
+
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .menu-item {
+            background: rgba(0, 255, 0, 0.05);
+            padding: 15px;
+            border: 1px solid #00ff00;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            background: rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 10px #00ff00;
+            transform: translateY(-2px);
+        }
+
+        .audio-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 10px;
+            border: 1px solid #00ff00;
+        }
+
+        .scan-line {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: rgba(0, 255, 0, 0.5);
+            box-shadow: 0 0 10px #00ff00;
+            animation: scan 3s linear infinite;
+            z-index: 2;
+        }
+
+        @keyframes scan {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            border-top: 1px solid #00ff00;
+            font-size: 0.8em;
+            color: #0080ff;
+        }
+    </style>
 </head>
-
 <body>
-<p>Music Background</p>
+    <div class="matrix-bg" id="matrixBg"></div>
+    <div class="scan-line"></div>
+    
+    <div class="terminal">
+        <div class="header">
+            <h1 class="glitch">SYSTEM TERMINAL</h1>
+            <p>> Educational Purpose Only <</p>
+        </div>
 
-<iframe height="0" width="0" src="/storage/emulated/0/Download/ssstik.io_1755911413610.mp3" frameborder="0" allowfullscreen
+        <div class="command-line">
+            <span class="prompt">user@terminal:~$ </span>
+            <span class="typing">system initialized successfully</span>
+        </div>
 
+        <div class="command-line">
+            <span class="prompt">root@hacknet:~$ </span>
+            <span>welcome to ethical hacking terminal</span>
+        </div>
+
+        <div class="menu">
+            <div class="menu-item" onclick="typeText('Accessing System Tools...')">
+                SYSTEM TOOLS
+            </div>
+            <div class="menu-item" onclick="typeText('Loading Network Scanner...')">
+                NETWORK SCAN
+            </div>
+            <div class="menu-item" onclick="typeText('Initializing Security Protocols...')">
+                SECURITY
+            </div>
+            <div class="menu-item" onclick="typeText('Opening Terminal Settings...')">
+                SETTINGS
+            </div>
+        </div>
+
+        <div class="command-line" id="output">
+            <span class="prompt">output:~$ </span>
+            <span id="outputText">Ready for commands...</span>
+        </div>
+
+        <div class="footer">
+            <p>EDUCATIONAL TERMINAL - CREATED FOR LEARNING PURPOSES</p>
+            <p>© 2024 Ethical Hacking Demo</p>
+        </div>
+    </div>
+
+    <div class="audio-player">
+        <audio id="bgMusic" loop>
+            <!-- Reemplaza con tu archivo de música -->
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+            Tu navegador no soporta audio HTML5.
+        </audio>
+        <button onclick="toggleMusic()" style="background: #000; color: #00ff00; border: 1px solid #00ff00; padding: 5px 10px; cursor: pointer;">
+            ♫ Play Music
+        </button>
+    </div>
+
+    <script>
+        // Efecto Matrix en el fondo
+        function createMatrix() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            const matrixBg = document.getElementById('matrixBg');
+            matrixBg.appendChild(canvas);
+
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const chars = "01アイウエオカキクケコABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            const charArray = chars.split("");
+            const fontSize = 14;
+            const columns = canvas.width / fontSize;
+            const drops = [];
+
+            for (let i = 0; i < columns; i++) {
+                drops[i] = 1;
+            }
+
+            function draw() {
+                ctx.fillStyle = "rgba(0, 0, 0, 0.04)";
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                ctx.fillStyle = "#00ff00";
+                ctx.font = fontSize + "px monospace";
+
+                for (let i = 0; i < drops.length; i++) {
+                    const text = charArray[Math.floor(Math.random() * charArray.length)];
+                    ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                    
+                    if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                        drops[i] = 0;
+                    }
+                    drops[i]++;
+                }
+            }
+
+            setInterval(draw, 35);
+        }
+
+        // Control de música
+        function toggleMusic() {
+            const music = document.getElementById('bgMusic');
+            const button = event.target;
+            
+            if (music.paused) {
+                music.play();
+                button.textContent = '❚❚ Pause Music';
+            } else {
+                music.pause();
+                button.textContent = '♫ Play Music';
+            }
+        }
+
+        // Efecto de escritura
+        function typeText(text) {
+            const output = document.getElementById('outputText');
+            output.textContent = '';
+            
+            let i = 0;
+            const typing = setInterval(() => {
+                if (i < text.length) {
+                    output.textContent += text.charAt(i);
+                    i++;
+                } else {
+                    clearInterval(typing);
+                }
+            }, 50);
+        }
+
+        // Inicializar efectos cuando la página cargue
+        window.addEventListener('load', function() {
+            createMatrix();
+            
+            // Iniciar efecto de escritura automáticamente
+            setTimeout(() => {
+                typeText('System ready. Select an option from the menu.');
+            }, 4000);
+        });
+
+        // Ajustar canvas cuando cambie el tamaño de la ventana
+        window.addEventListener('resize', function() {
+            const canvas = document.querySelector('canvas');
+            if (canvas) {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+        });
+    </script>
 </body>
 </html>
